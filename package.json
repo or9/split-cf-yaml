@@ -1,5 +1,5 @@
 {
-  "name": "@or9-rockman/split-cf-yaml",
+  "name": "split-cf-yaml",
   "version": "1.0.0",
   "description": "Split consolidated Cloudfoundry deployment manifest.yml into separate yml files Edit",
   "main": "index.js",
