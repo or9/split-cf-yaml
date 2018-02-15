@@ -1,7 +1,7 @@
 ---
 # :::::::::::::::::::Shared properties:::::::::::::::::::
 # All applications use these settings and services
-memory: 512MB
+memory: 128MB
 instances: 1
 buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git#v1.6.11
 command:  npm start

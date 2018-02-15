@@ -2,7 +2,7 @@
 "use strict";
 
 const { load, dump } = require("js-yaml");
-const { readFileSync, writeFileSync } = require("fs");
+const { readFileSync, writeFile } = require("fs");
 const { join } = require("path");
 
 const FILENAME = join(process.env.PWD, `manifest.yml`);
@@ -11,24 +11,22 @@ const MANIFEST_YML = load(CONTENT);
 const APPS = MANIFEST_YML.applications.slice(0);
 delete MANIFEST_YML.applications;
 
-const DEPLOYMENT_APPS = process.argv.slice(2);
-
-if (!DEPLOYMENT_APPS.length) {
-	console.error("Expected at least one argument [app-name-from-manifest]")
-	process.exit(1);
+if (!APPS.length) {
+	console.error("manifest.yml apparently does not have any apps listed");
+	return process.exit(1);
 }
 
-DEPLOYMENT_APPS.forEach(createManifestForAppName);
+APPS.filter(({ name }) => name !== "THIS_SHOULD_NOT_BE_DEPLOYED")
+	.forEach(createManifestForAppName);
 
-function createManifestForAppName (appName) {
-	const WRITE_FILE_PATH = join(process.env.PWD, `manifest-${appName}.yml`);
-	const APP = APPS.find(appEntry => appEntry.name === appName);
+function createManifestForAppName (APP) {
+	const { name } = APP;
+	const WRITE_FILE_PATH = join(process.env.PWD, `manifest-${name}.yml`);
 
 	for (const key in APP) {
 		if (!Array.isArray(APP[key])) continue;
 
 		APP[key] = APP[key].concat(MANIFEST_YML[key]);
-		// APP[key] = [...new Set(APP[key])]
 	}
 
 	const YML_COPY = {
@@ -45,7 +43,16 @@ function createManifestForAppName (appName) {
 
 	const YML_FILE_CONTENT = dump(YML_COPY);
 
-	writeFileSync(WRITE_FILE_PATH, YML_FILE_CONTENT);
+	return writeFile(WRITE_FILE_PATH, YML_FILE_CONTENT, "utf-8", wroteFile);
 
-	console.info(`Wrote new file ${WRITE_FILE_PATH}`);
+	function wroteFile (err) {
+		if (err) {
+			console.error(`Encountered error writing ${WRITE_FILE_PATH}\n${err.stack}`);
+			if (process.argv[2].includes("fail=true")) {
+				process.exit(1);
+			}
+		} else {
+			console.info(`Wrote new file ${WRITE_FILE_PATH}`)
+		}
+	}
 }
