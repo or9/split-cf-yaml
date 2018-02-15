@@ -1,0 +1,27 @@
+---
+# :::::::::::::::::::Shared properties:::::::::::::::::::
+# All applications use these settings and services
+memory: 512MB
+instances: 1
+buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git#v1.6.11
+command:  npm start
+
+env:
+  redis_service_name: some_env_thing
+
+# ::::::::::::::::: END Shared properties:::::::::::::::::
+# Declare individual instance property overrides below
+
+applications:
+- name: THIS_SHOULD_NOT_BE_DEPLOYED
+  instances: -1
+  memory: -2000TB
+
+- name: split-cf-yml-dev
+  env:
+    APP_ENV: dev
+
+
+- name: split-cf-yml-uat
+  env:
+    APP_ENV: uat

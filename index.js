@@ -13,6 +13,11 @@ delete MANIFEST_YML.applications;
 
 const DEPLOYMENT_APPS = process.argv.slice(2);
 
+if (!DEPLOYMENT_APPS.length) {
+	console.error("Expected at least one argument [app-name-from-manifest]")
+	process.exit(1);
+}
+
 DEPLOYMENT_APPS.forEach(createManifestForAppName);
 
 function createManifestForAppName (appName) {
