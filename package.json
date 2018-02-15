@@ -1,0 +1,36 @@
+{
+  "name": "@or9-rockman/split-cf-yaml",
+  "version": "1.0.0",
+  "description": "Split consolidated Cloudfoundry deployment manifest.yml into separate yml files Edit",
+  "main": "index.js",
+  "bin": {
+    "split-yml": "index.js"
+  },
+  "scripts": {
+    "test": "mocha *.spec.js --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/or9/split-cf-yaml.git"
+  },
+  "keywords": [
+    "yml",
+    "cloudfoundry",
+    "node"
+  ],
+  "author": "Abdur Rahman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/or9/split-cf-yaml/issues"
+  },
+  "homepage": "https://github.com/or9/split-cf-yaml#readme",
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.1",
+    "sinon": "^4.3.0",
+    "sinon-chai": "^2.14.0"
+  }
+}
