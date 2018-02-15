@@ -4,7 +4,8 @@
   "description": "Split consolidated Cloudfoundry deployment manifest.yml into separate yml files Edit",
   "main": "index.js",
   "bin": {
-    "split-yml": "index.js"
+    "split-yml": "index.js",
+    "split-yaml": "index.js"
   },
   "scripts": {
     "test": "mocha *.spec.js --reporter spec"
