@@ -4,8 +4,21 @@
 const { load, dump } = require("js-yaml");
 const { readFileSync, writeFile } = require("fs");
 const { join } = require("path");
+const yargs = require("yargs");
 
-const FILENAME = join(process.env.PWD, `manifest.yml`);
+const argv = yargs.usage("Usage: $0 --in [path] --out [path]")
+	.demandOption([])
+	.example("$0 --in ./ --out ./bin")
+	.alias("o", "out")
+	.describe("o", "Directory in which to write manifest files")
+	.alias("i", "in")
+	.describe("i", "Directory from which to read manifest files")
+	.help("h")
+	.alias("h", "help")
+	.default({ i: "./", o: "./" })
+	.argv;
+
+const FILENAME = join(process.env.PWD, argv.i, `manifest.yml`);
 const CONTENT = readFileSync(FILENAME);
 const MANIFEST_YML = load(CONTENT);
 const APPS = MANIFEST_YML.applications.slice(0);
@@ -21,7 +34,7 @@ APPS.filter(({ name }) => name !== "THIS_SHOULD_NOT_BE_DEPLOYED")
 
 function createManifestForAppName (APP) {
 	const { name } = APP;
-	const WRITE_FILE_PATH = join(process.env.PWD, `manifest-${name}.yml`);
+	const WRITE_FILE_PATH = join(process.env.PWD, argv.o, `manifest-${name}.yml`);
 
 	for (const key in APP) {
 		if (!Array.isArray(APP[key])) continue;
